@@ -2,11 +2,16 @@ package com.betvictor.currency.entities;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ExchangeRates {
     public String base;
     public String source;
-    public Date timestamp;    
+    public Date timestamp;
     public HashMap<String, Double> rates;
 
     public String getBase() {
@@ -41,10 +46,36 @@ public class ExchangeRates {
         this.rates = rates;
     }
 
-    public ExchangeRates(com.betvictor.currency.entities.exchangerate.ExchangeRate rates) {
-        this.base = rates.getBase();
-        this.source = "exchangerate";
+    @JsonIgnore
+    public ExchangeRates rebase(String base) {
+        if (this.rates.containsKey(base)) {
+            Double rate = this.rates.get(base);
+            Double multiplier = 1 / rate;
+
+            HashMap<String, Double> map = new HashMap<String, Double>();
+            Set<Entry<String, Double>> entries = this.rates.entrySet();
+            for (Map.Entry<String, Double> e : entries) {
+                map.put(e.getKey(), multiplier * e.getValue());
+            }
+
+            return new ExchangeRates(base, this.source, map);
+        } else
+            throw new IllegalArgumentException("Invalid base: " + base);
+    }
+
+    public ExchangeRates(String base, String source, HashMap<String, Double> rates) {
+        this.base = base;
+        this.source = source;
         this.timestamp = new Date();
-        this.rates = rates.getRates();
+        this.rates = rates;
+    }
+
+    public ExchangeRates(com.betvictor.currency.entities.exchangerate.ExchangeRate rates) {
+        this(rates.getBase(), "exchangerate", rates.getRates());
+
+    }
+
+    public ExchangeRates(com.betvictor.currency.entities.openexchangerates.OpenExchangeRates rates) {
+        this(rates.getBase(), "openexchangerates", rates.getRates());
     }
 }

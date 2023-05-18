@@ -5,9 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.betvictor.currency.apis.service.LoaderService;
-import com.betvictor.currency.apis.service.LoaderService.CurrencySource;
 import com.betvictor.currency.entities.ExchangeRates;
+import com.betvictor.currency.service.LoaderService;
+import com.betvictor.currency.service.LoaderService.CurrencySource;
 
 @SpringBootApplication
 public class CurrencyApplication implements CommandLineRunner {

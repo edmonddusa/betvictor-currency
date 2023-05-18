@@ -1,4 +1,4 @@
-package com.betvictor.currency.apis.service;
+package com.betvictor.currency.service;
 
 import java.util.List;
 

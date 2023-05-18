@@ -1,4 +1,4 @@
-package com.betvictor.currency.apis.service;
+package com.betvictor.currency.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

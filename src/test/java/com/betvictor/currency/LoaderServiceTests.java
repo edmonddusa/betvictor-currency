@@ -17,6 +17,11 @@ class LoaderServiceTests {
     private LoaderService loaderService;
 
 	@Test
+	public void contextLoads() throws Exception {
+		assertThat(loaderService).isNotNull();
+	}
+
+	@Test
 	void testExchangeRate() {
 		ExchangeRates rates = loaderService.loadRates(CurrencySource.EXCHANGERATE, "EUR");
 
@@ -31,5 +36,4 @@ class LoaderServiceTests {
 		assertThat(rates.base).isEqualTo("USD");
 		assertThat(rates.rates.size()).isGreaterThan(100);
 	}
-
 }

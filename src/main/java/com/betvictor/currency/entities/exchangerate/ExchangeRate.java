@@ -1,11 +1,13 @@
 package com.betvictor.currency.entities.exchangerate;
 
-public class Response {
+import java.util.HashMap;
+
+public class ExchangeRate {
     public Motd motd;
     public boolean success;
     public String base;
     public String date;
-    public Rates rates;
+    public HashMap<String, Double> rates;
 
     public Motd getMotd() {
         return motd;
@@ -39,11 +41,13 @@ public class Response {
         this.date = date;
     }
 
-    public Rates getRates() {
+    public HashMap<String, Double> getRates() {
         return rates;
     }
 
-    public void setRates(Rates rates) {
+    public void setRates(HashMap<String, Double> rates) {
         this.rates = rates;
     }
+
+   
 }

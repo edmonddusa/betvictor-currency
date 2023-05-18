@@ -1,4 +1,4 @@
-package com.betvictor.currency.types.exchangerate;
+package com.betvictor.currency.entities.exchangerate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

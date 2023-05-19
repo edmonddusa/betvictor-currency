@@ -26,9 +26,8 @@ class CurrencyConversionServiceTests {
 		ExchangeRates rates0 = conversionService.getExchangeRates("EUR");
 		ExchangeRates rates1 = conversionService.getExchangeRates("EUR");
 
-
 		assertThat(rates0.getTimestamp()).isEqualTo(rates1.getTimestamp());
-		
+		assertThat(rates0.getSource()).isEqualTo(rates1.getSource());
 	}
 
 	

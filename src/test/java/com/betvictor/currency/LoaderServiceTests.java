@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.betvictor.currency.entities.ExchangeRates;
+import com.betvictor.currency.entity.ExchangeRates;
 import com.betvictor.currency.service.LoaderService;
 import com.betvictor.currency.service.LoaderService.CurrencySource;
 
@@ -25,15 +25,15 @@ class LoaderServiceTests {
 	void testExchangeRate() {
 		ExchangeRates rates = loaderService.loadRates(CurrencySource.EXCHANGERATE, "EUR");
 
-		assertThat(rates.base).isEqualTo("EUR");
-		assertThat(rates.rates.size()).isGreaterThan(100);
+		assertThat(rates.getBase()).isEqualTo("EUR");
+		assertThat(rates.getRates().size()).isGreaterThan(100);
 	}
 
 	@Test
 	void testOpenExchangeRates() {
 		ExchangeRates rates = loaderService.loadRates(CurrencySource.OPENEXCHANGERATES, "USD");
 
-		assertThat(rates.base).isEqualTo("USD");
-		assertThat(rates.rates.size()).isGreaterThan(100);
+		assertThat(rates.getBase()).isEqualTo("USD");
+		assertThat(rates.getRates().size()).isGreaterThan(100);
 	}
 }

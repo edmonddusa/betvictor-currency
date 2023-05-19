@@ -2,6 +2,7 @@ package com.betvictor.currency.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CurrencyConversionController {
     private CurrencyConversionService conversionService;
 
     @RequestMapping(value = "/rates/{baseSymbol}", method = RequestMethod.GET)
-    public ExchangeRates getRates(@PathVariable("baseSymbol") String baseSymbol) {
+    public ExchangeRates getRates(@PathVariable("baseSymbol") String baseSymbol) throws ExecutionException {
         return conversionService.getExchangeRates(baseSymbol.toUpperCase());
     }
 

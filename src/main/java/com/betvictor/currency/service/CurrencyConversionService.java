@@ -2,28 +2,41 @@ package com.betvictor.currency.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.betvictor.currency.entity.CurrencyExchange;
 import com.betvictor.currency.entity.ExchangeRates;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 @Service
-@CacheConfig(cacheNames = { "symbols" })
 public class CurrencyConversionService {
 
     @Autowired
     private LoaderService loaderService;
 
-    @Cacheable(key = "#baseSymbol")
-    public ExchangeRates getExchangeRates(String baseSymbol) {
-        return loaderService.loadRates(baseSymbol);
+    LoadingCache<String, ExchangeRates> cache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .build(
+                    new CacheLoader<String, ExchangeRates>() {
+
+                        @Override
+                        public ExchangeRates load(String key) {
+                            return loaderService.loadRates(key);
+                        }
+                    });
+
+    public ExchangeRates getExchangeRates(String baseSymbol) throws ExecutionException {
+        return cache.get(baseSymbol);
     }
 
-    public CurrencyExchange convert(String fromSymbol, String toSymbol, Double amount) {
+    public CurrencyExchange convert(String fromSymbol, String toSymbol, Double amount) throws ExecutionException {
         ExchangeRates rates = getExchangeRates(fromSymbol);
 
         if (rates.getRates().containsKey(toSymbol)) {
@@ -35,7 +48,14 @@ public class CurrencyConversionService {
     public List<CurrencyExchange> convert(String fromSymbol, List<String> toSymbols, Double amount) {
         ArrayList<CurrencyExchange> list = new ArrayList<CurrencyExchange>();
 
-        toSymbols.stream().forEach(s -> list.add(convert(fromSymbol, s, amount)));
+        toSymbols.stream().forEach(s -> {
+            try {
+                list.add(convert(fromSymbol, s, amount));
+            } catch (ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
 
         return list;
     }

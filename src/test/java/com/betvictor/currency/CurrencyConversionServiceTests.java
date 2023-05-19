@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.betvictor.currency.entity.CurrencyExchange;
 import com.betvictor.currency.entity.ExchangeRates;
@@ -28,7 +29,7 @@ class CurrencyConversionServiceTests {
 	}
 
 	@Test
-	void testCache() {
+	void testCache() throws ExecutionException {
 		ExchangeRates rates0 = conversionService.getExchangeRates("EUR");
 		ExchangeRates rates1 = conversionService.getExchangeRates("EUR");
 
@@ -37,7 +38,7 @@ class CurrencyConversionServiceTests {
 	}
 
 	@Test
-	void testEURtoEUR() {
+	void testEURtoEUR() throws ExecutionException {
 		CurrencyExchange convert = conversionService.convert("EUR", "EUR", 1000.0);
 
 		assertThat(convert.getFrom().getSymbol()).isEqualTo("EUR");
@@ -46,7 +47,7 @@ class CurrencyConversionServiceTests {
 	}
 
 	@Test
-	void testEURtoUSD() {
+	void testEURtoUSD() throws ExecutionException {
 		CurrencyExchange convert = conversionService.convert("EUR", "USD", 1000.0);
 
 		assertThat(convert.getFrom().getSymbol()).isEqualTo("EUR");
@@ -79,7 +80,7 @@ class CurrencyConversionServiceTests {
 	}
 
 	@Test
-	void testRebase() {
+	void testRebase() throws ExecutionException {
 		double epsilon = 0.1d;
 
 		ExchangeRates eurRates = conversionService.getExchangeRates("EUR");

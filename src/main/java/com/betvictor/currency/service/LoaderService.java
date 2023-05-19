@@ -1,5 +1,7 @@
 package com.betvictor.currency.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -8,6 +10,8 @@ import com.betvictor.currency.entity.ExchangeRates;
 
 @Service
 public class LoaderService {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("${exchangerate.url}")
     private String exchangeRateUrl;
@@ -27,6 +31,8 @@ public class LoaderService {
     }
 
     public ExchangeRates loadRates(String baseSymbol) {
+        log.info(String.format("Loading currency rates for %s ...", baseSymbol));
+        
         try {
             return loadRates(CurrencySource.EXCHANGERATE, baseSymbol);
         } catch (Exception e) {

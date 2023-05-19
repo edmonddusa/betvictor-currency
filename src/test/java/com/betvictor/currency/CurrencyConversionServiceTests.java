@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.betvictor.currency.entity.CurrencyExchange;
@@ -66,11 +67,19 @@ class CurrencyConversionServiceTests {
 
 	@Test
 	void testRebase() {
+		double epsilon = 0.1d;
+		
 		ExchangeRates eurRates = conversionService.getExchangeRates("EUR");
 		ExchangeRates usdRates = conversionService.getExchangeRates("USD");
 		ExchangeRates rebaseRate = eurRates.rebase("USD");
 		
-
 		assertThat(eurRates.getBase()).isEqualTo("EUR");
+		assertThat(usdRates.getRates().size()).isEqualTo(rebaseRate.getRates().size());
+
+		HashMap<String, Double> rates = rebaseRate.getRates();
+
+		usdRates.getRates().forEach((key, value) -> {
+			assertThat(Math.abs(value - rates.get(key)) < epsilon).isTrue();
+		});
 	}
 }

@@ -16,7 +16,7 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("currency");
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("symbols");
         cacheManager.setCaffeine(caffeineCacheBuilder());
         return cacheManager;
     }
@@ -26,7 +26,6 @@ public class CacheConfig {
                 .initialCapacity(100)
                 .maximumSize(500)
                 .expireAfterWrite(1, TimeUnit.MINUTES)
-                .weakKeys()
                 .recordStats();
     }
 }

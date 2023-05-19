@@ -12,13 +12,13 @@ import com.betvictor.currency.entity.CurrencyExchange;
 import com.betvictor.currency.entity.ExchangeRates;
 
 @Service
-@CacheConfig(cacheNames = { "currency" })
+@CacheConfig(cacheNames = { "symbols" })
 public class CurrencyConversionService {
 
     @Autowired
     private LoaderService loaderService;
 
-    @Cacheable
+    @Cacheable(key = "#baseSymbol")
     public ExchangeRates getExchangeRates(String baseSymbol) {
         return loaderService.loadRates(baseSymbol);
     }

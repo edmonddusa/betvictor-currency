@@ -16,7 +16,7 @@ public class CurrencyConversionController {
     private CurrencyConversionService conversionService;
 
     @RequestMapping(value = "/rates/{baseSymbol}", method = RequestMethod.GET)
-    public ExchangeRates getFoosBySimplePathWithPathVariable(@PathVariable("baseSymbol") String baseSymbol) {
+    public ExchangeRates getRates(@PathVariable("baseSymbol") String baseSymbol) {
         return conversionService.getExchangeRates(baseSymbol);
     }
 }

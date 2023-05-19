@@ -1,4 +1,4 @@
-package com.betvictor.currency.entities.exchangerate;
+package com.betvictor.currency.entity.exchangerate;
 
 public class Motd {
     public String msg;

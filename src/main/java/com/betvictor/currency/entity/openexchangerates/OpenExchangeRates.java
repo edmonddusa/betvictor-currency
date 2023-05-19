@@ -1,4 +1,4 @@
-package com.betvictor.currency.entities.openexchangerates;
+package com.betvictor.currency.entity.openexchangerates;
 
 import java.util.HashMap;
 

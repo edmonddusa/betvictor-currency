@@ -1,4 +1,4 @@
-package com.betvictor.currency.entities;
+package com.betvictor.currency.entity;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,10 +9,11 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ExchangeRates {
-    public String base;
-    public String source;
-    public Date timestamp;
-    public HashMap<String, Double> rates;
+
+    private String base;
+    private String source;
+    private Date timestamp;
+    private HashMap<String, Double> rates;
 
     public String getBase() {
         return base;
@@ -70,12 +71,12 @@ public class ExchangeRates {
         this.rates = rates;
     }
 
-    public ExchangeRates(com.betvictor.currency.entities.exchangerate.ExchangeRate rates) {
+    public ExchangeRates(com.betvictor.currency.entity.exchangerate.ExchangeRate rates) {
         this(rates.getBase(), "exchangerate", rates.getRates());
 
     }
 
-    public ExchangeRates(com.betvictor.currency.entities.openexchangerates.OpenExchangeRates rates) {
+    public ExchangeRates(com.betvictor.currency.entity.openexchangerates.OpenExchangeRates rates) {
         this(rates.getBase(), "openexchangerates", rates.getRates());
     }
 }

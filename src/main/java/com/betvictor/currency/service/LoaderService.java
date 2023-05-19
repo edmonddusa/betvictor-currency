@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.betvictor.currency.entities.ExchangeRates;
+import com.betvictor.currency.entity.ExchangeRates;
 
 @Service
 public class LoaderService {
@@ -44,13 +44,13 @@ public class LoaderService {
             default:
             case EXCHANGERATE:
                 exchangeRates = new ExchangeRates(restTemplate.getForObject(uri,
-                        com.betvictor.currency.entities.exchangerate.ExchangeRate.class));
+                        com.betvictor.currency.entity.exchangerate.ExchangeRate.class));
 
                 break;
 
             case OPENEXCHANGERATES:
                 exchangeRates = new ExchangeRates(restTemplate.getForObject(uri,
-                        com.betvictor.currency.entities.openexchangerates.OpenExchangeRates.class));
+                        com.betvictor.currency.entity.openexchangerates.OpenExchangeRates.class));
                 if (!baseSymbol.equals(exchangeRates.getBase())) {
                     exchangeRates = exchangeRates.rebase(baseSymbol);
                 }

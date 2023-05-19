@@ -15,21 +15,18 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 public class CacheConfig {
 
     @Bean
-    public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder()
-                       
-                       .expireAfterWrite(12, TimeUnit.HOURS)
-                       .expireAfterAccess(12, TimeUnit.HOURS)
-                       .initialCapacity(100);
+    public CacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("currency");
+        cacheManager.setCaffeine(caffeineCacheBuilder());
+        return cacheManager;
     }
 
-    @Bean
-    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-        
-        caffeineCacheManager.setCaffeine(caffeine);
-
-        
-        return caffeineCacheManager;
+    Caffeine<Object, Object> caffeineCacheBuilder() {
+        return Caffeine.newBuilder()
+                .initialCapacity(100)
+                .maximumSize(500)
+                .expireAfterAccess(10, TimeUnit.MINUTES)
+                .weakKeys()
+                .recordStats();
     }
 }

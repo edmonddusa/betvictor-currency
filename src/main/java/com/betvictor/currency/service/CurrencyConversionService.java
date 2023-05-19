@@ -1,5 +1,6 @@
 package com.betvictor.currency.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +8,11 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.betvictor.currency.entity.CurrencyExchange;
 import com.betvictor.currency.entity.ExchangeRates;
 
 @Service
-@CacheConfig(cacheNames = {"currency"})
+@CacheConfig(cacheNames = { "currency" })
 public class CurrencyConversionService {
 
     @Autowired
@@ -21,11 +23,20 @@ public class CurrencyConversionService {
         return loaderService.loadRates(baseSymbol);
     }
 
-    public Double convert(String fromSymbol, String toSymbol, Double amount) {
-        return 0.0;
+    public CurrencyExchange convert(String fromSymbol, String toSymbol, Double amount) {
+        ExchangeRates rates = getExchangeRates(fromSymbol);
+
+        if (rates.getRates().containsKey(toSymbol)) {
+            return new CurrencyExchange(fromSymbol, amount, toSymbol, rates.getRates().get(toSymbol) * amount);
+        } else
+            throw new IllegalArgumentException("No such symbol " + toSymbol);
     }
 
-    public Double convert(String fromSymbol, List<String> toSymbols, Double amount) {
-        return 0.0;
+    public List<CurrencyExchange> convert(String fromSymbol, List<String> toSymbols, Double amount) {
+        ArrayList<CurrencyExchange> list = new ArrayList<CurrencyExchange>();
+
+        toSymbols.stream().forEach(s -> list.add(convert(fromSymbol, s, amount)));
+
+        return list;
     }
 }

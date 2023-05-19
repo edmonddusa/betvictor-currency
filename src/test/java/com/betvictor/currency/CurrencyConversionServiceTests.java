@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,12 +16,11 @@ import com.betvictor.currency.entity.CurrencyExchange;
 import com.betvictor.currency.entity.ExchangeRates;
 import com.betvictor.currency.service.CurrencyConversionService;
 
-
 @SpringBootTest
 class CurrencyConversionServiceTests {
 
 	@Autowired
-    private CurrencyConversionService conversionService;
+	private CurrencyConversionService conversionService;
 
 	@Test
 	public void contextLoads() throws Exception {
@@ -53,6 +54,18 @@ class CurrencyConversionServiceTests {
 	}
 
 	@Test
+	void testBadSymbol() {
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			conversionService.convert("EUR", Arrays.asList("USD", "XXX", "NOK"), 1000.0);
+		});
+
+		String expectedMessage = "No such symbol XXX";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
+
+	@Test
 	void testList() {
 		List<CurrencyExchange> converts = conversionService.convert("EUR", Arrays.asList("USD", "SEK", "NOK"), 1000.0);
 
@@ -68,11 +81,11 @@ class CurrencyConversionServiceTests {
 	@Test
 	void testRebase() {
 		double epsilon = 0.1d;
-		
+
 		ExchangeRates eurRates = conversionService.getExchangeRates("EUR");
 		ExchangeRates usdRates = conversionService.getExchangeRates("USD");
 		ExchangeRates rebaseRate = eurRates.rebase("USD");
-		
+
 		assertThat(eurRates.getBase()).isEqualTo("EUR");
 		assertThat(usdRates.getRates().size()).isEqualTo(rebaseRate.getRates().size());
 

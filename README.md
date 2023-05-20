@@ -11,7 +11,7 @@ For building and running the application you need:
 
 ## Building the application locally
 
-To build the application locally and run all test use command below:
+To build the application locally and run all tests use command below:
 ```shell
 mvn clean install
 ``` 
@@ -25,6 +25,17 @@ Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/
 ```shell
 mvn spring-boot:run
 ```
+
+## Configuring the application
+
+The application uses 2 feeds, api.exchangerate.host and openexchangerates.org. Trying to use the first and if this fails using the second. These can be configured in the /src/main/resources/application.properties file. Caching is done by default on a per currency basis and for a maximum time of one minute. Content of properties file below.
+
+```properties
+exchangerate.url=https://api.exchangerate.host/latest
+openexchangerates.url=https://openexchangerates.org/api/latest.json
+openexchangerates.key=8ed1f86e43de4767a3647d7c85cd7dc7
+```
+
 
 ## Rest API usage
 The application publishes a REST endpoints to convert between international currencies. By default it is running on port 8080. To convert 1000 EURO to USD run:
@@ -75,6 +86,8 @@ The output is a array of conversion, one for each currency
   }
 ]
 ```
+## Swagger
+I tried configuring Swagger 2 but gave up after 4 hours as none of the guides out there seem to be working. Keeps giving me warning of security issues, and none of the endpints and gui is showing up. 
 
 
 ## Copyright

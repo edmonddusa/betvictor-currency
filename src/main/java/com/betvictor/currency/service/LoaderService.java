@@ -16,9 +16,6 @@ public class LoaderService {
     @Value("${exchangerate.url}")
     private String exchangeRateUrl;
 
-    @Value("${exchangerate.base}")
-    private String exchangeRateBase;
-
     @Value("${openexchangerates.url}")
     private String openExchangeRateUrl;
 

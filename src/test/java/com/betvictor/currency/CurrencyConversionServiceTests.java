@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -39,16 +40,16 @@ class CurrencyConversionServiceTests {
 
 	@Test
 	void testEURtoEUR() throws ExecutionException {
-		CurrencyExchange convert = conversionService.convert("EUR", "EUR", 1000.0);
+		CurrencyExchange convert = conversionService.convert("EUR", "EUR", new BigDecimal("1000.00"));
 
 		assertThat(convert.getFrom().getSymbol()).isEqualTo("EUR");
 		assertThat(convert.getTo().getSymbol()).isEqualTo("EUR");
-		assertThat(convert.getTo().getAmount()).isEqualTo(convert.getFrom().getAmount());
+		assertThat(convert.getTo().getAmount().compareTo(convert.getFrom().getAmount())).isEqualTo(0);
 	}
 
 	@Test
 	void testEURtoUSD() throws ExecutionException {
-		CurrencyExchange convert = conversionService.convert("EUR", "USD", 1000.0);
+		CurrencyExchange convert = conversionService.convert("EUR", "USD", new BigDecimal("1000.00"));
 
 		assertThat(convert.getFrom().getSymbol()).isEqualTo("EUR");
 		assertThat(convert.getTo().getSymbol()).isEqualTo("USD");
@@ -57,7 +58,7 @@ class CurrencyConversionServiceTests {
 	@Test
 	void testBadSymbol() {
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			conversionService.convert("EUR", Arrays.asList("USD", "XXX", "NOK"), 1000.0);
+			conversionService.convert("EUR", Arrays.asList("USD", "XXX", "NOK"), new BigDecimal("1000.00"));
 		});
 
 		String expectedMessage = "No such symbol XXX";
@@ -68,7 +69,7 @@ class CurrencyConversionServiceTests {
 
 	@Test
 	void testList() {
-		List<CurrencyExchange> converts = conversionService.convert("EUR", Arrays.asList("USD", "SEK", "NOK"), 1000.0);
+		List<CurrencyExchange> converts = conversionService.convert("EUR", Arrays.asList("USD", "SEK", "NOK"), new BigDecimal("1000.00"));
 
 		assertThat(converts.size()).isEqualTo(3);
 		assertThat(converts.get(0).getFrom().getSymbol()).isEqualTo("EUR");

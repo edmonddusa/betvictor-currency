@@ -1,5 +1,6 @@
 package com.betvictor.currency.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -36,24 +37,22 @@ public class CurrencyConversionService {
         return cache.get(baseSymbol);
     }
 
-    public CurrencyExchange convert(String fromSymbol, String toSymbol, Double amount) throws ExecutionException {
+    public CurrencyExchange convert(String fromSymbol, String toSymbol, BigDecimal amount) throws ExecutionException {
         ExchangeRates rates = getExchangeRates(fromSymbol);
 
         if (rates.getRates().containsKey(toSymbol)) {
-            return new CurrencyExchange(fromSymbol, amount, toSymbol, rates.getRates().get(toSymbol) * amount);
+            return new CurrencyExchange(fromSymbol, amount, toSymbol, amount.multiply(BigDecimal.valueOf(rates.getRates().get(toSymbol))));
         } else
             throw new IllegalArgumentException("No such symbol " + toSymbol);
     }
 
-    public List<CurrencyExchange> convert(String fromSymbol, List<String> toSymbols, Double amount) {
+    public List<CurrencyExchange> convert(String fromSymbol, List<String> toSymbols, BigDecimal amount) {
         ArrayList<CurrencyExchange> list = new ArrayList<CurrencyExchange>();
 
         toSymbols.stream().forEach(s -> {
             try {
                 list.add(convert(fromSymbol, s, amount));
             } catch (ExecutionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         });
 

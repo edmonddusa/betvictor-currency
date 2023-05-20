@@ -1,5 +1,6 @@
 package com.betvictor.currency.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,8 +29,8 @@ public class CurrencyConversionController {
 
     @RequestMapping(value = "/{fromSymbol}/{toSymbols}/{amount}", method = RequestMethod.GET)
     public List<CurrencyExchange> convert(@PathVariable("fromSymbol") String fromSymbol,
-            @PathVariable("toSymbols") String toSymbols, @PathVariable("amount") Double amount) {
+            @PathVariable("toSymbols") String toSymbols, @PathVariable("amount") String amount) {
 
-        return conversionService.convert(fromSymbol.toUpperCase(), Arrays.asList(toSymbols.split("\\s*,\\s*")).stream().map(String::toUpperCase).collect(Collectors.toList()), amount);
+        return conversionService.convert(fromSymbol.toUpperCase(), Arrays.asList(toSymbols.split("\\s*,\\s*")).stream().map(String::toUpperCase).collect(Collectors.toList()), new BigDecimal(amount));
     }
 }

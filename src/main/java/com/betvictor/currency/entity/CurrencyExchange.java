@@ -1,5 +1,7 @@
 package com.betvictor.currency.entity;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CurrencyExchange {
@@ -26,7 +28,7 @@ public class CurrencyExchange {
         this.to = to;
     }
 
-    public CurrencyExchange(String fromSymbol, Double fromAmount, String toSymbol, Double toAmount) {
+    public CurrencyExchange(String fromSymbol, BigDecimal fromAmount, String toSymbol, BigDecimal toAmount) {
         this.from = new SymbolAmount(fromSymbol, fromAmount);
         this.to = new SymbolAmount(toSymbol, toAmount);
     }

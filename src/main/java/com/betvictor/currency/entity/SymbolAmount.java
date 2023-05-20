@@ -1,9 +1,12 @@
 package com.betvictor.currency.entity;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class SymbolAmount {
 
     private String symbol;
-    private Double amount;
+    private BigDecimal amount;
 
     public String getSymbol() {
         return symbol;
@@ -13,16 +16,16 @@ public class SymbolAmount {
         this.symbol = symbol;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public SymbolAmount(String symbol, Double amount) {
+    public SymbolAmount(String symbol, BigDecimal amount) {
         this.symbol = symbol;
-        this.amount = amount;
+        this.amount = amount.setScale(2, RoundingMode.CEILING);
     }
 }

@@ -26,6 +26,6 @@ public class SymbolAmount {
 
     public SymbolAmount(String symbol, BigDecimal amount) {
         this.symbol = symbol;
-        this.amount = amount.setScale(2, RoundingMode.CEILING);
+        this.amount = amount;
     }
 }

@@ -1,7 +1,6 @@
 package com.betvictor.currency.entity;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class SymbolAmount {
 
